@@ -1,0 +1,126 @@
+/*===========================
+ *** Common CSS START ***
+=============================*/
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+body {
+    background: #764AF1;
+    position: relative;
+    height: 100vh;
+}
+
+ul,
+ol {
+    list-style-type: none;
+}
+
+a,
+a:focus,
+a:hover {
+    text-decoration: none;
+    outline: 0;
+}
+
+img {
+    overflow: hidden;
+    border: 0;
+    vertical-align: middle;
+}
+
+.zindex {
+    position: relative;
+    z-index: 999;
+}
+
+.clr {
+    clear: both;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    line-height: 27px;
+}
+
+@font-face {
+    src: url(../fonts/Roboto-Bold.ttf);
+    font-family: rb;
+}
+
+@font-face {
+    src: url(../fonts/Roboto-Regular.ttf);
+    font-family: rr;
+}
+
+@font-face {
+    src: url(../fonts/Roboto-Thin.ttf);
+    font-family: rt;
+}
+
+.font-rb {
+    font-family: rb;
+}
+
+.font-rr {
+    font-family: rr;
+}
+
+.font-rt {
+    font-family: rt;
+}
+
+/*===========================
+ *** FORM CSS ***
+=============================*/
+.loginform {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+}
+
+.logbtn {
+    width: 100%;
+    background: #764AF1;
+    border: 1px solid #764AF1;
+}
+
+.logbtn:hover,.replybox button:hover {
+    background: #5120dd;
+}
+
+.logtitle {
+    font-size: 25px;
+}
+
+.logst {
+    color: #666;
+    font-size: 15px;
+}
+
+.replybox {
+    position: relative;
+}
+
+.replybox button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #764AF1;
+    border: 1px solid #764AF1;
+}
