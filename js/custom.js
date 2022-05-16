@@ -201,21 +201,38 @@ function myThreadId(id) {
 
 //delete
 function myThreadIdDel(id) {
-    
+
     const checkUser = $('.replyUser' + id).val();
-    
+
     fetch('http://localhost:7777/api/threads/' + id)
         .then(res => res.json())
         .then(data => {
 
             if (id == data.id && checkUser == data.user) {
-                
-                
-                
-                
-                
+
+
+                fetch('http://localhost:7777/api/threads/' + id, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            user: checkUser,
+                            id: id,
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+                  
+                location.reload();
+                return false;
+
+
+
             } else {
-              console.log("This user has no permission...");
+                alert("User has no permission...");
             }
 
         });
