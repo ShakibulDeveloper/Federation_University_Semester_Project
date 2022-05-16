@@ -45,6 +45,7 @@
 
     const userFullName = $('#userFullNam').val();
 
+
     fetch(allThreadsUrl)
         .then(res => res.json())
         .then(data => {
@@ -68,27 +69,42 @@
                                     <input type="hidden" class="form-control replyUser${thread.id}"  value="${username}">
                                     <input type="hidden" class="form-control replyUserFull${thread.id}" value="${userFullName}">
                                     <a class="btn btn-primary font-rb stopLoad${thread.id}" id="stopLoad${thread.id}" dataID="${thread.id}" onclick="myThreadId(${thread.id})">Post</a>
+                                    <a class="btn btn-danger" id="delbtn" onclick="myThreadIdDel(${thread.id})">Delete</a>
+
+                                    
+                                    
                                 </div>
                         </div>
                     </div>
                 </div>
                 `;
 
-                fetch('http://localhost:7777/api/threads/' + thread.id + '/posts')
-                    .then(res => res.json())
-                    .then(data => {
-                        data.forEach(post => {
-
-                            $('.posts_main' + thread.id).append(`<p class="mb-3"> ${post.text} 
+                window.myGlobleFun = function autoLoad() {
+                    fetch('http://localhost:7777/api/threads/' + thread.id + '/posts')
+                        .then(res => res.json())
+                        .then(data => {
+                            data.forEach(post => {
+                                $('.posts_main' + thread.id).append(`<p class="mb-3"> ${post.text} 
                                 -<b> ${post.name} </b> </p>`);
 
+                            });
+                            //$('.posts_main'+thread.id).html(htmlPosts);
                         });
-                        //$('.posts_main'+thread.id).html(htmlPosts);
-                    });
+                }.call(this);
+
+
+                //window.parent.myGlobleFun();
+
 
             });
             $('.threads_main').html(htmlThreads);
+
         });
+
+
+    setInterval(window.myGlobleFun, 3000);
+
+    //alert(window.myGlobleFun);
 
     // post threads
     $('#user').val(username);
@@ -158,7 +174,6 @@
 
 
 
-
 }(jQuery));
 
 function myThreadId(id) {
@@ -167,7 +182,7 @@ function myThreadId(id) {
     const getReplyUser = $('.replyUser' + id).val();
     const getReplyUserFullName = $('.replyUserFull' + id).val();
 
-    fetch('http://localhost:7777/api/threads/'+id+'/posts', {
+    fetch('http://localhost:7777/api/threads/' + id + '/posts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -182,5 +197,26 @@ function myThreadId(id) {
         .then(data => {
             console.log(data);
         })
+}
 
+//delete
+function myThreadIdDel(id) {
+    
+    const checkUser = $('.replyUser' + id).val();
+    
+    fetch('http://localhost:7777/api/threads/' + id)
+        .then(res => res.json())
+        .then(data => {
+
+            if (id == data.id && checkUser == data.user) {
+                
+                
+                
+                
+                
+            } else {
+              console.log("This user has no permission...");
+            }
+
+        });
 }
