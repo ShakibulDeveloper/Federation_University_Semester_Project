@@ -3,7 +3,6 @@
     "use strict";
 
 
-
     //    const url = 'http://localhost:7777/api/users';
     //    const allUsername = [];
     //    const allUsernamel = ["hi", "hello"];
@@ -25,6 +24,15 @@
     let username = searchParams.get('username');
     $('#hid_user_name').val(username);
 
+
+    // collection more infos of log user
+    fetch('http://localhost:7777/api/users/' + username)
+        .then(res => res.json())
+        .then(data => {
+            $('#userFullNam').val(data.name);
+
+        });
+
     // showing the input username
     var htmlStr = '<i class="text-center logst">Logged in as ' + username + '</i>';
     $('.loggedUser').html(htmlStr);
@@ -33,8 +41,9 @@
     const allThreadsUrl = 'http://localhost:7777/api/threads';
 
     let htmlThreads = '';
-
     let htmlPosts = '';
+
+    const userFullName = $('#userFullNam').val();
 
     fetch(allThreadsUrl)
         .then(res => res.json())
@@ -51,12 +60,15 @@
                                 <div class="posts_main${thread.id}"></div>
 
 
-                                <form class="replybox">
+                                <div class="replybox${thread.id}">
                                             <div class="mb-3">
-                                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="My Reply">
+                                                <input type="text" class="form-control replyPOST${thread.id}" placeholder="My Reply">
                                     </div>
-                                    <button type="submit" class="btn btn-primary font-rb">Post</button>
-                                </form>
+                                    <input type="hidden" class="form-control threadID${thread.id}" value="${thread.id}">
+                                    <input type="hidden" class="form-control replyUser${thread.id}"  value="${username}">
+                                    <input type="hidden" class="form-control replyUserFull${thread.id}" value="${userFullName}">
+                                    <a class="btn btn-primary font-rb stopLoad${thread.id}" id="stopLoad${thread.id}" dataID="${thread.id}" onclick="myThreadId(${thread.id})">Post</a>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +90,6 @@
             $('.threads_main').html(htmlThreads);
         });
 
-
     // post threads
     $('#user').val(username);
     const postFormData = document.querySelector('.postForm');
@@ -90,6 +101,7 @@
         e.preventDefault();
         const postTitle = $('#titlePOST').val();
         const postEmoji = $('#emoji').val();
+        const postText = $('#PROtext').val();
 
         fetch('http://localhost:7777/api/threads', {
                 method: 'POST',
@@ -100,7 +112,7 @@
                     thread_title: postTitle,
                     user: postName,
                     icon: postEmoji,
-                    text: 'ok',
+                    text: postText,
                 })
             })
             .then(res => res.json())
@@ -108,7 +120,67 @@
                 console.log(data);
             })
 
-    })
+    });
+
+
+    // insert reply
+
+
+
+
+    //        function getId(id) {
+    //            const replyText = $('.replyPOST'+id).val();
+    //            const getThreadID = $('.threadID'+id).val();
+    //            const getReplyUser = $('.replyUser'+id).val();
+    //            const getReplyUserFullName = $('.replyUserFull'+id).val();
+    //
+    //            fetch('http://localhost:7777/api/threads/' + getThreadID + '/posts', {
+    //                    method: 'POST',
+    //                    headers: {
+    //                        'Content-Type': 'application/json'
+    //                    },
+    //                    body: JSON.stringify({
+    //                        text: replyText,
+    //                        user: getReplyUser,
+    //                        name: getReplyUserFullName,
+    //                    })
+    //                })
+    //                .then(res => res.json())
+    //                .then(data => {
+    //                    console.log(data);
+    //                })
+
+
+
+
+
+    //    });
+
+
 
 
 }(jQuery));
+
+function myThreadId(id) {
+    const replyText = $('.replyPOST' + id).val();
+    const getThreadID = $('.threadID' + id).val();
+    const getReplyUser = $('.replyUser' + id).val();
+    const getReplyUserFullName = $('.replyUserFull' + id).val();
+
+    fetch('http://localhost:7777/api/threads/'+id+'/posts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: replyText,
+                user: getReplyUser,
+                name: getReplyUserFullName,
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+
+}
