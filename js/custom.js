@@ -30,7 +30,6 @@
 
     const userFullName = $('#userFullNam').val();
 
-
     fetch(allThreadsUrl)
         .then(res => res.json())
         .then(data => {
@@ -48,7 +47,7 @@
 
                                 <div class="replybox${thread.id}">
                                             <div class="mb-3">
-                                                <input type="text" class="form-control replyPOST${thread.id}" placeholder="My Reply">
+                                                <input type="text" class="form-control stopr${thread.id} replyPOST${thread.id}" placeholder="My Reply" onclick="stopr(${thread.id})">
                                     </div>
                                     <input type="hidden" class="form-control threadID${thread.id}" value="${thread.id}">
                                     <input type="hidden" class="form-control replyUser${thread.id}"  value="${username}">
@@ -79,7 +78,6 @@
         });
 
 
-    setInterval(window.myGlobleFun, 3000);
 
     // post threads
     $('#user').val(username);
@@ -114,8 +112,19 @@
             })
     });
 
+    // reload pg after 10s 
+
+    $('.holdRelod').on('click', function () {
+        clearInterval(myRelFunction);
+    });
+
+    $('.btn-close').on('click', function () {
+        location.reload();
+    });
+
 }(jQuery));
 
+// post threads replys
 function myThreadId(id) {
     const replyText = $('.replyPOST' + id).val();
     const getThreadID = $('.threadID' + id).val();
@@ -136,6 +145,8 @@ function myThreadId(id) {
         .then(res => res.json())
         .then(data => {
             console.log(data);
+            location.reload();
+            return false;
         })
 }
 
@@ -143,7 +154,7 @@ function myThreadId(id) {
 function myThreadIdDel(id) {
 
     const checkUser = $('.replyUser' + id).val();
-    
+
     fetch('http://localhost:7777/api/threads/' + id)
         .then(res => res.json())
         .then(data => {
@@ -172,4 +183,11 @@ function myThreadIdDel(id) {
             }
 
         });
+}
+const myRelFunction = setInterval(reloadPg, 10000);
+
+function stopr(id) {
+    $('.stopr' + id).on('keypress', function () {
+        clearInterval(myRelFunction);
+    });
 }
