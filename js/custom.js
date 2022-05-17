@@ -3,21 +3,6 @@
     "use strict";
 
 
-    //    const url = 'http://localhost:7777/api/users';
-    //    const allUsername = [];
-    //    const allUsernamel = ["hi", "hello"];
-    //    var inputusername = '';
-    //
-    //
-    //
-    //    fetch(url)
-    //        .then(res => res.json())
-    //        .then(data => {
-    //            data.forEach(user => {
-    //                allUsername.push(user.username);
-    //            });
-    //        });
-
     // collecting value from URL
     let searchParams = new URLSearchParams(window.location.search);
     searchParams.has('username');
@@ -69,10 +54,7 @@
                                     <input type="hidden" class="form-control replyUser${thread.id}"  value="${username}">
                                     <input type="hidden" class="form-control replyUserFull${thread.id}" value="${userFullName}">
                                     <a class="btn btn-primary font-rb stopLoad${thread.id}" id="stopLoad${thread.id}" dataID="${thread.id}" onclick="myThreadId(${thread.id})">Post</a>
-                                    <a class="btn btn-danger" id="delbtn" onclick="myThreadIdDel(${thread.id})">Delete</a>
-
-                                    
-                                    
+                                    <a class="btn btn-danger" id="delbtn" onclick="myThreadIdDel(${thread.id})">Delete</a> 
                                 </div>
                         </div>
                     </div>
@@ -88,13 +70,8 @@
                                 -<b> ${post.name} </b> </p>`);
 
                             });
-                            //$('.posts_main'+thread.id).html(htmlPosts);
                         });
                 }.call(this);
-
-
-                //window.parent.myGlobleFun();
-
 
             });
             $('.threads_main').html(htmlThreads);
@@ -103,8 +80,6 @@
 
 
     setInterval(window.myGlobleFun, 3000);
-
-    //alert(window.myGlobleFun);
 
     // post threads
     $('#user').val(username);
@@ -134,45 +109,10 @@
             .then(res => res.json())
             .then(data => {
                 console.log(data);
+                location.reload();
+                return false;
             })
-
     });
-
-
-    // insert reply
-
-
-
-
-    //        function getId(id) {
-    //            const replyText = $('.replyPOST'+id).val();
-    //            const getThreadID = $('.threadID'+id).val();
-    //            const getReplyUser = $('.replyUser'+id).val();
-    //            const getReplyUserFullName = $('.replyUserFull'+id).val();
-    //
-    //            fetch('http://localhost:7777/api/threads/' + getThreadID + '/posts', {
-    //                    method: 'POST',
-    //                    headers: {
-    //                        'Content-Type': 'application/json'
-    //                    },
-    //                    body: JSON.stringify({
-    //                        text: replyText,
-    //                        user: getReplyUser,
-    //                        name: getReplyUserFullName,
-    //                    })
-    //                })
-    //                .then(res => res.json())
-    //                .then(data => {
-    //                    console.log(data);
-    //                })
-
-
-
-
-
-    //    });
-
-
 
 }(jQuery));
 
@@ -203,14 +143,12 @@ function myThreadId(id) {
 function myThreadIdDel(id) {
 
     const checkUser = $('.replyUser' + id).val();
-
+    
     fetch('http://localhost:7777/api/threads/' + id)
         .then(res => res.json())
         .then(data => {
 
             if (id == data.id && checkUser == data.user) {
-
-
                 fetch('http://localhost:7777/api/threads/' + id, {
                         method: 'DELETE',
                         headers: {
@@ -221,13 +159,11 @@ function myThreadIdDel(id) {
                             id: id,
                         })
                     })
-                    .then(res => res.json())
+                    .then(res => res.text())
                     .then(data => {
-                        console.log(data);
+                        location.reload();
+                        return false;
                     })
-                  
-                location.reload();
-                return false;
 
 
 
